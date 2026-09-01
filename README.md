@@ -1,48 +1,45 @@
 # ProcessGuard — Windows Service & Process Security Monitoring Agent
 
-**ProcessGuard** is a real-time process and service monitoring agent built in Python for Windows and cross-platform systems. It provides continuous security telemetry, anomaly detection, automated alert dispatching, an interactive Rich live terminal dashboard, and dark-themed HTML report generation.
+**ProcessGuard** is a real-time process and service security monitoring agent built in Python for Windows and cross-platform systems. It provides continuous security telemetry, baseline anomaly detection, automated alert dispatching, an interactive Rich live terminal dashboard, and dark-themed HTML report generation.
+
+---
+
+## 🚨 Problem Statement
+
+In modern endpoint security, malicious software, rogue background scripts, and stealthy persistence mechanisms frequently exploit operating system mechanisms to evade detection:
+
+- **Directory Evasion**: Malware binaries execute out of user-writable directories such as `AppData\Local\Temp`, `Downloads`, `Public`, or `/dev/shm` to bypass basic software policies.
+- **Process Hollowing & Name Spoofing**: Malicious binaries disguise themselves with legitimate system names (e.g., spoofing `svchost.exe`) or run as hollowed processes with obscured executable paths.
+- **Anomalous Parent-Child Executions**: Compromised applications (such as Office documents or web browsers) silently spawn shell interpreters (`cmd.exe`, `powershell.exe`, `wscript.exe`) to achieve remote execution.
+- **Unauthorized Persistence**: Malware alters Windows `Run` / `RunOnce` registry keys or modifies system service binary paths to maintain persistence across system reboots.
+- **Resource Hijacking**: Cryptominers and background encryption processes consume excessive system resources without raising standard system alarms.
+
+---
+
+## 🛡️ How ProcessGuard Solves It
+
+ProcessGuard provides a lightweight, automated endpoint security monitoring agent that detects, logs, and alerts on these threats in real time:
+
+1. **Automated Baseline Capture**: Establishes initial baselines for running processes, active services, and auto-start registry keys upon startup.
+2. **Multi-Vector Detection Engine**: Operates 7 concurrent security monitoring modules:
+   - **Process Baseline Monitor**: Tracks newly spawned processes and baseline process terminations.
+   - **Service & Daemon Watcher**: Detects state changes, start type modifications, and service binary path tampering.
+   - **Suspicious Path & Spoofing Detector**: Flags binaries in untrusted folders, hollowed processes, and filename mismatches.
+   - **Resource Usage Analyzer**: Detects sustained high CPU spikes (>80%) and high RAM consumption (>500MB).
+   - **Process Tree Anomaly Analyzer**: Flags illegal parent-child executions (e.g., Word or Chrome launching PowerShell).
+   - **Binary Signature & Trust Checker**: Validates PE version resources and executable binary trust metadata.
+   - **Registry Auto-Start Watcher**: Audits Windows auto-run registry keys for unauthorized modifications.
+3. **Intelligent Alerting & Deduplication**: Manages alert cooldowns to prevent notification spam, logs events to a thread-safe SQLite database, and fires native desktop notifications for High/Critical threats.
+4. **Interactive Dashboard & HTML Reporting**: Provides a real-time terminal UI for live monitoring alongside automated, dark-themed HTML telemetry exports containing actionable incident remediation steps.
 
 ---
 
 ## 🌟 Key Features
 
-- **7 Modular Security Detectors**:
-  1. **Process Snapshot Monitor**: Records process startup/termination baselines and tracks new executable spawns.
-  2. **Service & Daemon Monitor**: Tracks state changes, start types, and binary path modifications for system services.
-  3. **Suspicious Path & Spoofing Detector**: Flags binaries running out of `Temp`, `AppData`, `Downloads`, or `/dev/shm`, detects hollowed processes, and flags process name spoofing.
-  4. **Resource Usage Monitor**: Tracks sustained CPU spikes (>80%) and memory consumption (>500MB).
-  5. **Process Tree Anomaly Analyzer**: Detects suspicious parent-child process pairs (e.g., `winword.exe` spawning `powershell.exe` or `cmd.exe`).
-  6. **Binary Signature & Trust Checker**: Validates Windows PE binary version resources and digital signature indicators.
-  7. **Registry Auto-Start Watcher**: Monitors Windows `Run` and `RunOnce` registry keys for persistence changes.
-
-- **Interactive Rich Terminal Dashboard**:
-  - Live 4-panel dashboard showing active processes, alerts, monitored services, threat summary, system pulse, and module health.
-
-- **Dark-Themed HTML Telemetry Exporter**:
-  - Generates standalone, CSS-only charts and security recommendations for compliance and incident response.
-
-- **Alert Engine & Notifications**:
-  - In-memory alert deduplication with 30-second cooldown windows, SQLite database persistence, and native desktop notifications via `plyer`.
-
----
-
-## 📁 Directory Structure
-
-```text
-processguard/
-├── config.yaml               # Application configuration file
-├── main.py                   # Entry point for ProcessGuard agent
-├── requirements.txt          # Required Python packages
-├── README.md                 # Project documentation
-├── config/                   # Configuration loader module
-├── dashboard/                # Rich live terminal dashboard UI
-├── data/                     # SQLite database & system log storage
-├── database/                 # SQLite DB manager with thread safety
-├── engine/                   # Scan loop and alert dispatch engine
-├── monitor/                  # 7 core security detection modules
-├── reporter/                 # Dark-themed HTML exporter
-└── utils/                    # Logger, platform checks, process helpers
-```
+- **7 Modular Security Detectors**
+- **Interactive Rich Live Terminal Dashboard**
+- **Dark-Themed HTML Telemetry Exporter with CSS Charts**
+- **In-Memory Cooldown & Native Desktop Notifications**
 
 ---
 
@@ -53,7 +50,7 @@ processguard/
 
 ### Setup Instructions
 
-1. **Clone or Navigate to Project Directory**:
+1. **Navigate to Project Directory**:
    ```powershell
    cd c:\Users\MSI\.gemini\antigravity\scratch\processguard
    ```
