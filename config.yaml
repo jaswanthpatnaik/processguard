@@ -1,0 +1,36 @@
+scan_interval_seconds: 5
+db_path: "data/processguard.db"
+
+thresholds:
+  cpu_alert_percent: 80
+  memory_alert_mb: 500
+  cpu_sustained_cycles: 3
+
+suspicious_paths:
+  windows:
+    - "\\Temp\\"
+    - "\\AppData\\Local\\Temp\\"
+    - "\\Downloads\\"
+    - "\\AppData\\Roaming\\"
+    - "\\Public\\"
+    - "\\ProgramData\\"
+  linux:
+    - "/tmp/"
+    - "/var/tmp/"
+    - "/dev/shm/"
+
+anomalous_pairs:
+  - {parent: "winword.exe",  child: "cmd.exe",        severity: "CRITICAL"}
+  - {parent: "winword.exe",  child: "powershell.exe",  severity: "CRITICAL"}
+  - {parent: "excel.exe",    child: "cmd.exe",         severity: "CRITICAL"}
+  - {parent: "excel.exe",    child: "powershell.exe",  severity: "CRITICAL"}
+  - {parent: "explorer.exe", child: "cmd.exe",         severity: "SUSPICIOUS"}
+  - {parent: "chrome.exe",   child: "cmd.exe",         severity: "CRITICAL"}
+  - {parent: "firefox.exe",  child: "powershell.exe",  severity: "CRITICAL"}
+  - {parent: "cmd.exe",      child: "powershell.exe",  severity: "SUSPICIOUS"}
+  - {parent: "any",          child: "wscript.exe",     severity: "HIGH"}
+  - {parent: "any",          child: "cscript.exe",     severity: "HIGH"}
+
+registry_keys:
+  - "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+  - "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
